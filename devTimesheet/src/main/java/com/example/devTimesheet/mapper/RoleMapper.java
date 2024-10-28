@@ -14,6 +14,6 @@ public interface RoleMapper {
     void updateRole(@MappingTarget Role role, RoleRequest request);
 
     @Mapping(target = "permissionRespons", source = "permissions")
-    @Mapping(target = "userRespons", source = "users")
+//    @Mapping(target = "userRespons", source = "users")
     RoleRespon toRoleRespon(Role role);
 }

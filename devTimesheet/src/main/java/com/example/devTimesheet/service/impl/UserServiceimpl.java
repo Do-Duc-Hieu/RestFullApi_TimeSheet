@@ -26,6 +26,13 @@ import com.example.devTimesheet.mapper.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -41,11 +48,18 @@ public class UserServiceimpl implements UserService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public UserRespon createUser(UserRequest request){
+    public UserRespon createUser(UserRequest request, MultipartFile avatar) throws IOException {
+        log.info(request.toString());
         if(userRepository.existsByUsername(request.getUsername())){
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         User user = userMapper.toUse(request);
+
+        // Lưu ảnh vào thư mục uploads
+        String fileName = avatar.getOriginalFilename();
+        Path filePath = Paths.get("C:\\devTimesheet\\devTimesheet\\src\\uploads\\" + fileName);
+        Files.copy(avatar.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
         user.setRole((Role) roleRepository.findRoleByNameRole(request.getRole().getNameRole())
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED)));
         user.setBranch((Branch) branchRepository.findBranchByNameBranch(request.getBranch().getNameBranch())
@@ -54,6 +68,7 @@ public class UserServiceimpl implements UserService {
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED)));
         //ma hoa mat khau
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setAvatarUrl(filePath.toString());
         userRepository.save(user);
 
         return userMapper.toUserRespon(user);

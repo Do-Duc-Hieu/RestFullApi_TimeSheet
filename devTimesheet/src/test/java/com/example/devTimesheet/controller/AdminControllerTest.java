@@ -106,7 +106,7 @@ public class AdminControllerTest {
         String  context = objectMapper.writeValueAsString(userRequest);
 
         //when
-        when(userService.createUser(ArgumentMatchers.any())).thenReturn(userRespon);
+       // when(userService.createUser(ArgumentMatchers.any())).thenReturn(userRespon);
 
         //then
         mockMvc.perform(post("/admin/addUser")

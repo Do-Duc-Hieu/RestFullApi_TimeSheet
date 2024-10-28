@@ -6,12 +6,14 @@ import com.example.devTimesheet.dto.respon.UserRespon;
 import com.example.devTimesheet.projection.UserProjection;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
 
-    UserRespon createUser(UserRequest request);
+    UserRespon createUser(UserRequest request, MultipartFile avatar) throws IOException;
 
     UserRespon getUser(Integer id);
 

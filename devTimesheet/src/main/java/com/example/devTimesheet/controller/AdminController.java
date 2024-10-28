@@ -17,7 +17,9 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -84,7 +86,7 @@ public class AdminController {
                 .result(userService.searchUserProjection(username, branch, userType, role)).build();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name or hasAuthority('Admin')")
+    @PostAuthorize("returnObject.result.username == authentication.name or hasAuthority('Admin')")
     @GetMapping("/getUser/{idUser}")
     public ApiRespon<UserRespon> getUser(@PathVariable Integer idUser) {
 
@@ -94,10 +96,18 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/addUser")
-    public ApiRespon<UserRespon> addUser(@RequestBody @Valid UserRequest request) {
+    public ApiRespon<UserRespon> addUser(@RequestPart("request") @Valid UserRequest request,
+                                         @RequestPart("avatar") MultipartFile avatar) {
 
-        return ApiRespon.<UserRespon>builder()
-                .result(userService.createUser(request)).build();
+        try {
+            return ApiRespon.<UserRespon>builder()
+                    .result(userService.createUser(request, avatar)).build();
+        } catch (IOException e) {
+            // Xử lý ngoại lệ, có thể log lại hoặc ném ngoại lệ tùy chỉnh
+            e.printStackTrace(); // Hoặc sử dụng logger để log lỗi
+            return ApiRespon.<UserRespon>builder()
+                    .result(new UserRespon()).build();
+        }
     }
 
     @PreAuthorize("hasAuthority('Admin')")
@@ -145,7 +155,7 @@ public class AdminController {
 
 
     // Service Role
-    @PreAuthorize("hasAuthority('SAdmin')")
+    @PreAuthorize("hasAuthority('Admin')")
     @GetMapping("/getAllRole")
     public ApiRespon<List<RoleRespon>> findAllRole() {
 

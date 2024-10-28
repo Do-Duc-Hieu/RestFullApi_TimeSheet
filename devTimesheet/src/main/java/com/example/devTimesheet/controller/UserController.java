@@ -2,11 +2,9 @@ package com.example.devTimesheet.controller;
 
 
 import com.example.devTimesheet.dto.request.RequestRequest;
-import com.example.devTimesheet.dto.request.TaskRequest;
 import com.example.devTimesheet.dto.request.TimeSheetRequest;
 import com.example.devTimesheet.dto.request.WorkTimeRequest;
 import com.example.devTimesheet.dto.respon.*;
-import com.example.devTimesheet.entity.RequestType;
 import com.example.devTimesheet.service.EmailService;
 import com.example.devTimesheet.service.RequestService;
 import com.example.devTimesheet.service.TimeSheetService;
@@ -18,12 +16,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,6 +43,19 @@ public class UserController {
     WorkTimeService workTimeService;
     RequestService requestService;
     EmailService emailService;
+
+    //Load image
+    @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
+    @GetMapping("/avatar/{filename}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable String filename) throws IOException {
+        Path filePath = Paths.get("C:\\devTimesheet\\devTimesheet\\src\\uploads", filename);
+        Resource resource = new UrlResource(filePath.toUri());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(resource);
+    }
+
 
     // Service TimeSheet
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")

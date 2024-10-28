@@ -27,6 +27,7 @@ public class User {
     String bank;
     String bankAccount;
     String taxCode;
+    String avatarUrl;
     int salary;
 
     @ManyToOne

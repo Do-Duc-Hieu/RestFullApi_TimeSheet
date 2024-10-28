@@ -23,6 +23,7 @@ public class UserRespon {
     String bank;
     String bankAccount;
     String taxCode;
+    String avatarUrl;
     int salary;
     RoleRespon role;
 
