@@ -1,10 +1,9 @@
 package com.example.devTimesheet.service;
 
+import java.util.List;
+
 import com.example.devTimesheet.dto.request.PunishmentRequest;
 import com.example.devTimesheet.dto.respon.PunishmentRespon;
-import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
 
 public interface PunishmentService {
 

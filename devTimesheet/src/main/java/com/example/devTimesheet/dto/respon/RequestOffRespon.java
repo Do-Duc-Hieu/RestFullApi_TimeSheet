@@ -1,7 +1,5 @@
 package com.example.devTimesheet.dto.respon;
 
-import com.example.devTimesheet.dto.request.LeaveTypeRequest;
-import com.example.devTimesheet.dto.request.RequestTypeRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
