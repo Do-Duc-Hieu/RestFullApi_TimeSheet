@@ -1,18 +1,19 @@
 package com.example.devTimesheet.config;
 
-import com.example.devTimesheet.service.PunishmentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.scheduling.support.CronTrigger;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.scheduling.support.CronTrigger;
+
+import com.example.devTimesheet.service.PunishmentService;
+
+import lombok.RequiredArgsConstructor;
 
 @EnableScheduling
 @Configuration
@@ -22,13 +23,10 @@ public class DynamicSchedulerConfig implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.addTriggerTask(
-                punishmentService::createPunishmentSchedule,
-                triggerContext -> {
-                    String cron = fetchCronExpressionFromDB();
-                    return new CronTrigger(cron).nextExecutionTime(triggerContext).toInstant();
-                }
-        );
+        taskRegistrar.addTriggerTask(punishmentService::createPunishmentSchedule, triggerContext -> {
+            String cron = fetchCronExpressionFromDB();
+            return new CronTrigger(cron).nextExecutionTime(triggerContext).toInstant();
+        });
     }
 
     private String fetchCronExpressionFromDB() {
