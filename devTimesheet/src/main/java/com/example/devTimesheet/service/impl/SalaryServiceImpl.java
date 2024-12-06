@@ -72,23 +72,12 @@ public class SalaryServiceImpl implements SalaryService {
         return salaryRespons;
     }
 
-    //    @Override
-    //    public RoleRespon updateRole(Integer idRole, RoleRequest request) {
-    //        Role role = roleRepository.findById(idRole)
-    //                .orElseThrow(()-> new RuntimeException("Role not found"));
-    //        List<Permission> permissions = new ArrayList<>();
-    //        request.getNamePermissions().forEach(
-    //                namePermission -> permissions.add((Permission) permissionRepository
-    //                        .findPermissionByNamePermission(namePermission)
-    //                        .orElseThrow(()-> new AppException(ErrorCode.USER_EXISTED)))
-    //        );
-    //        roleMapper.updateRole(role, request);
-    //        role.setPermissions(permissions);
-    //        return roleMapper.toRoleRespon(roleRepository.save(role));
-    //    }
-    //
-    //    @Override
-    //    public void deleteRole(Integer idRole){
-    //        roleRepository.deleteById(idRole);
-    //    }
+    @Override
+    public List<SalaryRespon> getSalaryByUser(String username) {
+        List<SalaryRespon> salaryRespons = new ArrayList<>();
+        List<Salary> salaries = salaryRepository.findByUsername(username);
+        salaries.forEach(salary -> salaryRespons.add(salaryMapper.toSalaryRespon(salary)));
+
+        return salaryRespons;
+    }
 }

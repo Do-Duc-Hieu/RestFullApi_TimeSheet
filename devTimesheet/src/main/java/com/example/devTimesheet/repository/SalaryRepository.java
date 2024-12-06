@@ -1,6 +1,7 @@
 package com.example.devTimesheet.repository;
 
 import java.time.YearMonth;
+import java.util.List;
 
 import jakarta.transaction.Transactional;
 
@@ -18,4 +19,7 @@ public interface SalaryRepository extends JpaRepository<Salary, Integer> {
     @Transactional
     @Query("DELETE FROM Salary s WHERE s.time = :time")
     void deleteByTime(@Param("time") YearMonth time);
+
+    @Query("SELECT s FROM Salary s WHERE s.user.username = :username")
+    List<Salary> findByUsername(@Param("username") String username);
 }

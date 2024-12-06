@@ -11,8 +11,6 @@ public interface SalaryService {
     SalaryRespon getSalary(Integer id);
 
     List<SalaryRespon> findAllSalary();
-    //
-    //    RoleRespon updateRole(Integer idRole, RoleRequest request);
-    //
-    //    void deleteRole(Integer idRole);
+
+    List<SalaryRespon> getSalaryByUser(String username);
 }

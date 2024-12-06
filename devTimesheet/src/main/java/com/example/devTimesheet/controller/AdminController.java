@@ -606,15 +606,13 @@ public class AdminController {
                 .result(salaryService.timekeeping(time))
                 .build();
     }
-    //
-    //    @PreAuthorize("hasAuthority('Admin')")
-    //    @PutMapping("/updateRole/{idRole}")
-    //    public ApiRespon<RoleRespon> updateRole(
-    //            @PathVariable Integer idRole,
-    //            @RequestBody RoleRequest request){
-    //
-    //        return ApiRespon.<RoleRespon>builder()
-    //                .result(roleService.updateRole(idRole, request)).build();
-    //    }
 
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/timekeeping/{time}")
+    public ApiRespon<List<SalaryRespon>> timekeeping(@PathVariable YearMonth time) {
+
+        return ApiRespon.<List<SalaryRespon>>builder()
+                .result(salaryService.timekeeping(time))
+                .build();
+    }
 }
