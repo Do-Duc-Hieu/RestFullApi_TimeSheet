@@ -1,11 +1,10 @@
 package com.example.devTimesheet.dto.respon;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +17,6 @@ public class PunishmentRespon {
     int punishmentMoney;
     String complainReply;
     String editedBy;
-    LocalTime checkIn;
-    LocalTime checkOut;
-    LocalTime checkInRegister;
-    LocalTime checkOutRegister;
+    String note;
     UserRespon userRespon;
 }

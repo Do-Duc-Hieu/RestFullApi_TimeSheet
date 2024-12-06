@@ -1,8 +1,18 @@
 package com.example.devTimesheet.controller;
 
+import com.example.devTimesheet.config.JwtUtils;
+import com.example.devTimesheet.dto.request.JwtRequest;
+import com.example.devTimesheet.dto.request.LogOutRequest;
+import com.example.devTimesheet.dto.respon.ApiRespon;
+import com.example.devTimesheet.dto.respon.AuthenticationRespon;
+import com.example.devTimesheet.service.LogOutService;
+import com.example.devTimesheet.service.impl.UserDetailServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,18 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.devTimesheet.config.JwtUtils;
-import com.example.devTimesheet.dto.request.JwtRequest;
-import com.example.devTimesheet.dto.request.LogOutRequest;
-import com.example.devTimesheet.dto.respon.ApiRespon;
-import com.example.devTimesheet.dto.respon.AuthenticationRespon;
-import com.example.devTimesheet.service.LogOutService;
-import com.example.devTimesheet.service.impl.UserDetailServiceImpl;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,14 +37,14 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/token")
-    ApiRespon<AuthenticationRespon> authentication(@RequestBody @Valid JwtRequest authenticationRequest)
-            throws Exception {
+    ApiRespon<AuthenticationRespon> authentication(@RequestBody @Valid JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         System.out.println("ok");
 
-        UserDetails userDetails = userDetailService.loadUserByUsername(authenticationRequest.getUsername());
+        UserDetails userDetails = userDetailService
+                .loadUserByUsername(authenticationRequest.getUsername());
 
         String token = jwtUtils.generateToken(userDetails);
         String tokenRefresh = jwtUtils.generateTokenRefresh(userDetails);
@@ -71,7 +69,6 @@ public class AuthenticationController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-
     @PreAuthorize("permitAll()")
     @PostMapping("/refreshToken")
     ApiRespon<AuthenticationRespon> refreshToken(HttpServletRequest request) throws Exception {
@@ -105,11 +102,14 @@ public class AuthenticationController {
                 .build();
     }
 
+
     @PreAuthorize("permitAll()")
     @PostMapping("/logOut")
-    ApiRespon<Void> logOut(@RequestBody @Valid LogOutRequest request) {
+    ApiRespon<Void> logOut(@RequestBody @Valid LogOutRequest request){
 
         logOut.logOut(request);
-        return ApiRespon.<Void>builder().build();
+        return ApiRespon.<Void>builder()
+                .build();
     }
 }
+

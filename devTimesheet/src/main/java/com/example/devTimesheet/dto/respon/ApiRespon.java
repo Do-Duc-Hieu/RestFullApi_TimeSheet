@@ -1,7 +1,6 @@
 package com.example.devTimesheet.dto.respon;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class ApiRespon<T> {
+public class ApiRespon <T>{
     int code = 200;
     String message;
     T result;

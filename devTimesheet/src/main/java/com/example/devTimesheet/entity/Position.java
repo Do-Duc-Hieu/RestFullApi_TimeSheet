@@ -1,11 +1,9 @@
 package com.example.devTimesheet.entity;
-
-import java.util.List;
-
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,12 +16,9 @@ public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-
     String namePosition;
-
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "position",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "position",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
     List<UserPosition> userPositions;
 }

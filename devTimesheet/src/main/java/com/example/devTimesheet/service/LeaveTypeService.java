@@ -1,9 +1,10 @@
 package com.example.devTimesheet.service;
 
-import java.util.List;
-
 import com.example.devTimesheet.dto.request.LeaveTypeRequest;
 import com.example.devTimesheet.dto.respon.LeaveTypeRespon;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import java.util.List;
 
 public interface LeaveTypeService {
 

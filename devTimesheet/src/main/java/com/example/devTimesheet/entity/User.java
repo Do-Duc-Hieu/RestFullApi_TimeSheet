@@ -1,11 +1,9 @@
 package com.example.devTimesheet.entity;
-
-import java.util.List;
-
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +16,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-
     String name;
     int sex;
     String usertype;
@@ -45,27 +42,33 @@ public class User {
     @JoinColumn(name = "workTime_id")
     WorkTime workTime;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
     List<Punishment> punishments;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
     List<Request> requests;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
     List<UserPosition> userPositions;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "timesheet_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
     List<TimeSheet> timeSheets;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
+    List<Salary> salarys;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
+    List<CheckInOut> checkInOuts;
 }
