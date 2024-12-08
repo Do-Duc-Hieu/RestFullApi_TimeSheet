@@ -1,7 +1,6 @@
 package com.example.devTimesheet.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,10 +9,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RequestLastRequest extends RequestTypeRequest {
+public class RequestLastRequest extends RequestTypeRequest{
     String note;
     float hour;
-
     @Builder
     public RequestLastRequest(@JsonProperty("types") String types, String type, String note, float hour) {
         super(types, type);

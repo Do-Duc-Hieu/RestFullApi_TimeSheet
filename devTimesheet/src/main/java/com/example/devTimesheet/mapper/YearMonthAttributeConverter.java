@@ -1,9 +1,8 @@
 package com.example.devTimesheet.mapper;
 
-import java.time.YearMonth;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import java.time.YearMonth;
 
 @Converter(autoApply = true)
 public class YearMonthAttributeConverter implements AttributeConverter<YearMonth, String> {
