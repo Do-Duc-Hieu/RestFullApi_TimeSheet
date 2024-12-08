@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig{
-    private final String[] PUBLIC_ENDPOINTS = {"/auth/token", "/auth/introspect", "/auth/logOut"};
+    private final String[] PUBLIC_ENDPOINTS = {"/auth/token", "/auth/introspect", "/auth/logOut", "/auth/addCheckInOut/**"};
 
 
     private  final LogoutTokenFilter logoutTokenFilter;

@@ -4,6 +4,7 @@ import com.example.devTimesheet.dto.request.PunishmentRequest;
 import com.example.devTimesheet.dto.respon.PunishmentRespon;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.time.YearMonth;
 import java.util.List;
 
 public interface PunishmentService {
@@ -13,6 +14,7 @@ public interface PunishmentService {
     void createPunishmentSchedule();
 
     List<PunishmentRespon> findAllPunishment();
+    List<PunishmentRespon> getPunishmentByUserAndTime(Integer idUser, YearMonth time);
 
     PunishmentRespon updatePunishment(Integer idPunishment, PunishmentRequest request);
 

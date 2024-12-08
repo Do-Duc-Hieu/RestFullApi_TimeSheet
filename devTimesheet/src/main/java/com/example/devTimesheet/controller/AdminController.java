@@ -517,6 +517,15 @@ public class AdminController {
 //                .result(punishmentService.createPunishment(request)).build();
 //    }
 
+    @PostAuthorize("hasAuthority('Admin') or (returnObject.result.size() > 0 and returnObject.result.get(0).userRespon.username == authentication.name)")
+    //@PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
+    @GetMapping("/getPunishment/{idUser}/{time}")
+    public ApiRespon<List<PunishmentRespon>> getPunishmentByUserAndTime(@PathVariable Integer idUser, @PathVariable YearMonth time) {
+
+        return ApiRespon.<List<PunishmentRespon>>builder()
+                .result(punishmentService.getPunishmentByUserAndTime(idUser, time)).build();
+    }
+
     @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/updatePunishment/{idPunishment}")
     public ApiRespon<PunishmentRespon> updatePunishment(

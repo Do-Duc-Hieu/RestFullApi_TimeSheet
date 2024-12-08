@@ -5,6 +5,8 @@ import com.example.devTimesheet.dto.request.JwtRequest;
 import com.example.devTimesheet.dto.request.LogOutRequest;
 import com.example.devTimesheet.dto.respon.ApiRespon;
 import com.example.devTimesheet.dto.respon.AuthenticationRespon;
+import com.example.devTimesheet.dto.respon.CheckInOutRespon;
+import com.example.devTimesheet.service.CheckInOutService;
 import com.example.devTimesheet.service.LogOutService;
 import com.example.devTimesheet.service.impl.UserDetailServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,10 +21,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -34,6 +33,7 @@ public class AuthenticationController {
     JwtUtils jwtUtils;
     LogOutService logOut;
     AuthenticationManager authenticationManager;
+    CheckInOutService checkInOutService;
 
     @PreAuthorize("permitAll()")
     @PostMapping("/token")
@@ -110,6 +110,15 @@ public class AuthenticationController {
         logOut.logOut(request);
         return ApiRespon.<Void>builder()
                 .build();
+    }
+
+    //Service checkInout
+    @PreAuthorize("permitAll()")
+    @PostMapping("/addCheckInOut/{request}")
+    public ApiRespon<CheckInOutRespon> addCheckInOut(@PathVariable String request) {
+
+        return ApiRespon.<CheckInOutRespon>builder()
+                .result(checkInOutService.createCheckInOut(request)).build();
     }
 }
 

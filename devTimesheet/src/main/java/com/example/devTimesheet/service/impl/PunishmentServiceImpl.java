@@ -2,6 +2,7 @@ package com.example.devTimesheet.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,15 @@ public class PunishmentServiceImpl implements PunishmentService {
     public List<PunishmentRespon> findAllPunishment() {
         List<PunishmentRespon> punishmentRespons = new ArrayList<>();
         List<Punishment> punishments = punishmentRepository.findAll();
+        punishments.forEach(punishment -> punishmentRespons.add(punishmentMapper.toPunishmentRespon(punishment)));
+
+        return punishmentRespons;
+    }
+
+    @Override
+    public List<PunishmentRespon> getPunishmentByUserAndTime(Integer idUser, YearMonth time) {
+        List<PunishmentRespon> punishmentRespons = new ArrayList<>();
+        List<Punishment> punishments = punishmentRepository.findByUserIdAndYearMonth(idUser, time.getYear(), time.getMonthValue());
         punishments.forEach(punishment -> punishmentRespons.add(punishmentMapper.toPunishmentRespon(punishment)));
 
         return punishmentRespons;

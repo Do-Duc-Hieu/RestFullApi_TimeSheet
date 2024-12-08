@@ -41,7 +41,6 @@ public class UserController {
     WorkTimeService workTimeService;
     RequestService requestService;
     EmailService emailService;
-    CheckInOutService checkInOutService;
 
     //Load image
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -366,14 +365,5 @@ public class UserController {
 
         return ApiRespon.<String>builder()
                 .result("Email has been send").build();
-    }
-
-    //Service checkInout
-    @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
-    @PostMapping("/addCheckInOut/{request}")
-    public ApiRespon<CheckInOutRespon> addCheckInOut(@PathVariable String request) {
-
-        return ApiRespon.<CheckInOutRespon>builder()
-                .result(checkInOutService.createCheckInOut(request)).build();
     }
 }
