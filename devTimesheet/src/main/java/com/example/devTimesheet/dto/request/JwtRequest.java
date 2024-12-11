@@ -1,7 +1,7 @@
 package com.example.devTimesheet.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class JwtRequest {
     @NotBlank(message = "Username must not be blank")
     String username;
+
     @NotBlank(message = "Password must not be blank")
     String password;
 }

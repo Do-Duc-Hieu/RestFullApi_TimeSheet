@@ -1,9 +1,9 @@
 package com.example.devTimesheet.entity;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Entity
 @Data
@@ -17,6 +17,7 @@ public abstract class RequestType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
     @OneToOne(mappedBy = "requestType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Request request;
 }

@@ -1,12 +1,9 @@
 package com.example.devTimesheet.dto.respon;
 
-import com.example.devTimesheet.dto.respon.RoleRespon;
-import com.example.devTimesheet.entity.Branch;
-import com.example.devTimesheet.entity.WorkTime;
+import java.io.File;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.io.File;
 
 @Data
 @NoArgsConstructor
