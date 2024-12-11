@@ -6,6 +6,8 @@ import com.example.devTimesheet.entity.WorkTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.File;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class UserRespon {
     String bank;
     String bankAccount;
     String taxCode;
-    String avatarUrl;
+    File avatar;
     int salary;
     RoleRespon role;
 

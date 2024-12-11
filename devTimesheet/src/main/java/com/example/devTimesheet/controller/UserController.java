@@ -6,6 +6,7 @@ import com.example.devTimesheet.dto.request.TimeSheetRequest;
 import com.example.devTimesheet.dto.request.WorkTimeRequest;
 import com.example.devTimesheet.dto.respon.*;
 import com.example.devTimesheet.entity.CheckInOut;
+import com.example.devTimesheet.entity.User;
 import com.example.devTimesheet.service.*;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,13 +44,15 @@ public class UserController {
     WorkTimeService workTimeService;
     RequestService requestService;
     EmailService emailService;
+    UserService userService;
 
     //Load image
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
-    @GetMapping("/avatar/{filename}")
-    public ResponseEntity<Resource> getAvatar(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get("C:\\devTimesheet\\devTimesheet\\src\\uploads", filename);
-        Resource resource = new UrlResource(filePath.toUri());
+    @GetMapping("/avatar/{id}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable Integer id) throws IOException {
+        User user = userService.findById(id);
+        File file = user.getAvatar();
+        Resource resource = new UrlResource(file.toURI());
 
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
@@ -214,10 +219,11 @@ public class UserController {
     //Service request
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PostMapping("/addRequest")
-    public ApiRespon<RequestRespon> addRequest(@RequestBody @Valid RequestRequest request) {
+    public ApiRespon<RequestRespon> addRequest(@RequestPart("request") @Valid RequestRequest request,
+                                               @RequestPart("image") MultipartFile image) throws IOException {
 
         return ApiRespon.<RequestRespon>builder()
-                .result(requestService.createRequest(request)).build();
+                .result(requestService.createRequest(request, image)).build();
     }
 
     @PreAuthorize("hasAuthority('Admin')")

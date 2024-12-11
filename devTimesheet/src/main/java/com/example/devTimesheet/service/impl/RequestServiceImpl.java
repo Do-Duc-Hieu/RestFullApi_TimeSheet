@@ -11,6 +11,7 @@ import com.example.devTimesheet.exception.AppException;
 import com.example.devTimesheet.exception.ErrorCode;
 import com.example.devTimesheet.mapper.RequestMapper;
 import com.example.devTimesheet.repository.*;
+import com.example.devTimesheet.service.FileStorageService;
 import com.example.devTimesheet.service.RequestService;
 import com.example.devTimesheet.service.WorkTimeService;
 import lombok.AccessLevel;
@@ -25,9 +26,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +51,18 @@ public class RequestServiceImpl implements RequestService {
     RequestMapper requestMapper;
     WorkTimeService workTimeService;
     WorkTimeRepository workTimeRepository;
+    FileStorageService fileStorageService;
 
     @Override
-    public RequestRespon createRequest(RequestRequest requestRequest){
+    public RequestRespon createRequest(RequestRequest requestRequest, MultipartFile image) throws IOException{
 
         Request request = requestMapper.toRequest(requestRequest);
         var context = SecurityContextHolder.getContext();
         String userName = context.getAuthentication().getName();
+
+        // Lưu file ảnh và trả về đối tượng File
+        File avatarFile = fileStorageService.saveFile(image);
+
         request.setCreatedAt(LocalDate.now());
         request.setUser((User) userRepository.findUserByUsername(userName)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED)));

@@ -14,6 +14,7 @@ import com.example.devTimesheet.repository.BranchRepository;
 import com.example.devTimesheet.repository.RoleRepository;
 import com.example.devTimesheet.repository.UserRepository;
 import com.example.devTimesheet.repository.WorkTimeRepository;
+import com.example.devTimesheet.service.FileStorageService;
 import com.example.devTimesheet.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.devTimesheet.mapper.*;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,7 @@ public class UserServiceimpl implements UserService {
     UserMapper userMapper;
     UserUpdateMapper userUpdateMapper;
     PasswordEncoder passwordEncoder;
+    FileStorageService fileStorageService;
 
     @Override
     public UserRespon createUser(UserRequest request, MultipartFile avatar) throws IOException {
@@ -55,10 +59,8 @@ public class UserServiceimpl implements UserService {
         }
         User user = userMapper.toUse(request);
 
-        // Lưu ảnh vào thư mục uploads
-        String fileName = avatar.getOriginalFilename();
-        Path filePath = Paths.get("C:\\devTimesheet\\devTimesheet\\src\\uploads\\" + fileName);
-        Files.copy(avatar.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        // Lưu file ảnh và trả về đối tượng File
+        File avatarFile = fileStorageService.saveFile(avatar);
 
         user.setRole((Role) roleRepository.findRoleByNameRole(request.getRole().getNameRole())
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED)));
@@ -68,7 +70,7 @@ public class UserServiceimpl implements UserService {
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED)));
         //ma hoa mat khau
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setAvatarUrl(filePath.toString());
+        user.setAvatar(avatarFile);
         userRepository.save(user);
 
         return userMapper.toUserRespon(user);
@@ -132,6 +134,12 @@ public class UserServiceimpl implements UserService {
     @Override
     public void deleteUser(Integer idUser){
         userRepository.deleteById(idUser);
+    }
+
+    @Override
+    public User findById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_EXISTED));
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.example.devTimesheet.entity;
+import com.example.devTimesheet.mapper.FileImageAttributeConverter;
+import com.example.devTimesheet.mapper.YearMonthAttributeConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.File;
 import java.util.List;
 
 @Entity
@@ -27,7 +30,8 @@ public class User {
     String bank;
     String bankAccount;
     String taxCode;
-    String avatarUrl;
+    @Convert(converter = FileImageAttributeConverter.class)
+    File avatar;
     int salary;
 
     @ManyToOne

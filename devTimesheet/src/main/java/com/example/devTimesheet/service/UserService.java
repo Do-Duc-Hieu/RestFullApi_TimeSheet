@@ -3,6 +3,7 @@ package com.example.devTimesheet.service;
 import com.example.devTimesheet.dto.request.UserRequest;
 import com.example.devTimesheet.dto.request.UserUpdateRequest;
 import com.example.devTimesheet.dto.respon.UserRespon;
+import com.example.devTimesheet.entity.User;
 import com.example.devTimesheet.projection.UserProjection;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ public interface UserService {
     void resetPassword(Integer idUser, String newPassword);
 
     void deleteUser(Integer idUser);
+    User findById(Integer id);
 
     UserRespon getMyInfo();
 }

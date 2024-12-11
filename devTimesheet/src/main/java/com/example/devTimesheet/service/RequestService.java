@@ -5,6 +5,7 @@ import com.example.devTimesheet.dto.respon.RequestRespon;
 import com.example.devTimesheet.entity.Request;
 import com.example.devTimesheet.entity.RequestType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface RequestService {
 
-    RequestRespon createRequest(RequestRequest requestRequest);
+    RequestRespon createRequest(RequestRequest requestRequest, MultipartFile image) throws IOException;
 
     RequestRespon getRequest(Integer id);
 
