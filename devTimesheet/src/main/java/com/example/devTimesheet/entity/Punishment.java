@@ -1,12 +1,12 @@
 package com.example.devTimesheet.entity;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import jakarta.persistence.*;
-
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,7 +19,6 @@ public class Punishment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-
     LocalDate date;
     String complain;
     int punishmentMoney;
@@ -31,6 +30,6 @@ public class Punishment {
     LocalTime checkOutRegister;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name    = "user_id")
     User user;
 }

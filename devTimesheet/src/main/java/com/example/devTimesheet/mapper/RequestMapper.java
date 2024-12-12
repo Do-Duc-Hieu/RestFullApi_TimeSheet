@@ -1,25 +1,22 @@
 package com.example.devTimesheet.mapper;
 
+import com.example.devTimesheet.dto.request.*;
+import com.example.devTimesheet.dto.respon.*;
+import com.example.devTimesheet.entity.*;
 import org.hibernate.Hibernate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import com.example.devTimesheet.dto.request.*;
-import com.example.devTimesheet.dto.respon.*;
-import com.example.devTimesheet.entity.*;
-
-@Mapper(
-        componentModel = "spring",
-        uses = {
-            StatusMapper.class,
-            UserMapper.class,
-            RequestLastMapper.class,
-            RequestRemoteMapper.class,
-            RequestWorkTimeMapper.class,
-            RequestOffMapper.class
-        })
+@Mapper(componentModel = "spring", uses = {
+        StatusMapper.class,
+        UserMapper.class,
+        RequestLastMapper.class,
+        RequestRemoteMapper.class,
+        RequestWorkTimeMapper.class,
+        RequestOffMapper.class
+})
 public interface RequestMapper {
     @Mapping(target = "requestType", source = "requestType", qualifiedByName = "mapRequestType")
     Request toRequest(RequestRequest requestRequest);
@@ -80,18 +77,12 @@ public interface RequestMapper {
     }
 
     RequestLast toRequestLast(RequestLastRequest requestLast);
-
     RequestRemote toRequestRemote(RequestRemoteRequest requestRemote);
-
     RequestWorkTime toRequestWorkTime(RequestWorkTimeRequest requestWorkTime);
-
     RequestOff toRequestOff(RequestOffRequest requestOff);
 
     RequestLastRespon toRequestLastRespon(RequestLast requestLast);
-
     RequestRemoteRespon toRequestRemoteRespon(RequestRemote requestRemote);
-
     RequestWorkTimeRespon toRequestWorkTimeRespon(RequestWorkTime requestWorkTime);
-
     RequestOffRespon toRequestOffRespon(RequestOff requestOff);
 }

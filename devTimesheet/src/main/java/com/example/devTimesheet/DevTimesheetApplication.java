@@ -12,7 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 public class DevTimesheetApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DevTimesheetApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(DevTimesheetApplication.class, args);
+	}
+
 }
