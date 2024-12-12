@@ -1,11 +1,9 @@
 package com.example.devTimesheet.dto.respon;
 
-import com.example.devTimesheet.dto.request.LeaveTypeRequest;
-import com.example.devTimesheet.dto.request.RequestTypeRequest;
+import java.io.File;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.io.File;
 
 @Data
 @NoArgsConstructor

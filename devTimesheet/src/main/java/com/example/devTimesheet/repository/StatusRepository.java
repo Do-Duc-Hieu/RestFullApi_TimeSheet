@@ -1,11 +1,11 @@
 package com.example.devTimesheet.repository;
 
-import com.example.devTimesheet.entity.Project;
-import com.example.devTimesheet.entity.Status;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.example.devTimesheet.entity.Status;
 
 @Repository
 public interface StatusRepository extends JpaRepository<Status, Integer> {

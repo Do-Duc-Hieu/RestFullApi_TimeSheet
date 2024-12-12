@@ -1,12 +1,13 @@
 package com.example.devTimesheet.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -15,7 +16,7 @@ import java.time.LocalTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("WORKTIME")
-public class RequestWorkTime  extends RequestType{
+public class RequestWorkTime extends RequestType {
     LocalTime morningStartTime;
     LocalTime morningEndTime;
     LocalTime afternoonStartTime;

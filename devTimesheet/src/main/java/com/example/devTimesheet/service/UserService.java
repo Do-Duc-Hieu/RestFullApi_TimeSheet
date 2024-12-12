@@ -1,16 +1,15 @@
 package com.example.devTimesheet.service;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.devTimesheet.dto.request.UserRequest;
 import com.example.devTimesheet.dto.request.UserUpdateRequest;
 import com.example.devTimesheet.dto.respon.UserRespon;
 import com.example.devTimesheet.entity.User;
 import com.example.devTimesheet.projection.UserProjection;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 public interface UserService {
 
@@ -18,11 +17,9 @@ public interface UserService {
 
     UserRespon getUser(Integer id);
 
-    List<UserRespon> searchUser(
-            String username, String branch, String userType, String role);
+    List<UserRespon> searchUser(String username, String branch, String userType, String role);
 
-    List<UserProjection> searchUserProjection(
-            String username, String branch, String userType, String role);
+    List<UserProjection> searchUserProjection(String username, String branch, String userType, String role);
 
     List<UserRespon> findAllUser();
 
@@ -31,6 +28,7 @@ public interface UserService {
     void resetPassword(Integer idUser, String newPassword);
 
     void deleteUser(Integer idUser);
+
     User findById(Integer id);
 
     UserRespon getMyInfo();

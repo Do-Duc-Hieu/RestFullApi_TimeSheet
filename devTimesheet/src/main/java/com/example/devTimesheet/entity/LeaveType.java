@@ -1,10 +1,11 @@
 package com.example.devTimesheet.entity;
+
+import java.util.List;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -17,12 +18,14 @@ public class LeaveType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
     String nameType;
 
     int dayOff;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "leaveType",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE
-                    , CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "leaveType",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     List<RequestOff> requestOffs;
 }

@@ -1,16 +1,14 @@
 package com.example.devTimesheet.service;
 
-import com.example.devTimesheet.dto.request.RequestRequest;
-import com.example.devTimesheet.dto.respon.RequestRespon;
-import com.example.devTimesheet.entity.Request;
-import com.example.devTimesheet.entity.RequestType;
-import com.example.devTimesheet.entity.User;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.devTimesheet.dto.request.RequestRequest;
+import com.example.devTimesheet.dto.respon.RequestRespon;
+import com.example.devTimesheet.entity.Request;
 
 public interface RequestService {
 
@@ -19,26 +17,30 @@ public interface RequestService {
     RequestRespon getRequest(Integer id);
 
     List<RequestRespon> findAllRequest();
+
     Request findById(Integer id);
 
-    List<RequestRespon> getRequestByUserAndDateRangeExcludingWorkTime(
-            LocalDate startDate, LocalDate endDate);
+    List<RequestRespon> getRequestByUserAndDateRangeExcludingWorkTime(LocalDate startDate, LocalDate endDate);
 
-    List<RequestRespon> getWorkTimeRequestsByUserAndDateRange(
-            LocalDate startDate, LocalDate endDate);
+    List<RequestRespon> getWorkTimeRequestsByUserAndDateRange(LocalDate startDate, LocalDate endDate);
 
-    List<RequestRespon> findAllWorkTimeRequestsByUserAndPending
-            (String statusName, List<String> nameProjects);
+    List<RequestRespon> findAllWorkTimeRequestsByUserAndPending(String statusName, List<String> nameProjects);
 
     List<RequestRespon> searchRequestByProject(
-            String projectName, String email,
-            String statusName, String nameRequestType,
-            LocalDate startDate, LocalDate endDate);
+            String projectName,
+            String email,
+            String statusName,
+            String nameRequestType,
+            LocalDate startDate,
+            LocalDate endDate);
 
     List<RequestRespon> searchRequestByBranch(
-            String branchName, String email,
-            String statusName, String nameRequestType,
-            LocalDate startDate, LocalDate endDate);
+            String branchName,
+            String email,
+            String statusName,
+            String nameRequestType,
+            LocalDate startDate,
+            LocalDate endDate);
 
     RequestRespon updateRequest(Integer idRequest, RequestRequest request);
 
@@ -47,8 +49,11 @@ public interface RequestService {
     RequestRespon browseRequest(Integer idRequest, RequestRequest request);
 
     public void exportRequestToExcel(
-            String projectName, String email,
-            String statusName, String nameRequestType,
-            LocalDate startDate, LocalDate endDate)
+            String projectName,
+            String email,
+            String statusName,
+            String nameRequestType,
+            LocalDate startDate,
+            LocalDate endDate)
             throws IOException;
 }

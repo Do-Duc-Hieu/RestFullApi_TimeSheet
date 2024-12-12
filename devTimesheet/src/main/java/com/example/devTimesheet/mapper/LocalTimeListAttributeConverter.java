@@ -1,10 +1,13 @@
 package com.example.devTimesheet.mapper;
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
+
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
+
 @Converter(autoApply = true) // Tự động áp dụng khi gặp List<LocalTime>
 public class LocalTimeListAttributeConverter implements AttributeConverter<List<LocalTime>, String> {
 
@@ -16,9 +19,7 @@ public class LocalTimeListAttributeConverter implements AttributeConverter<List<
             return null;
         }
         // Nối các LocalTime thành chuỗi phân cách bằng DELIMITER
-        return localTimes.stream()
-                .map(LocalTime::toString)
-                .collect(Collectors.joining(DELIMITER));
+        return localTimes.stream().map(LocalTime::toString).collect(Collectors.joining(DELIMITER));
     }
 
     @Override
@@ -27,8 +28,6 @@ public class LocalTimeListAttributeConverter implements AttributeConverter<List<
             return null;
         }
         // Tách chuỗi và chuyển về danh sách LocalTime
-        return Arrays.stream(dbData.split(DELIMITER))
-                .map(LocalTime::parse)
-                .collect(Collectors.toList());
+        return Arrays.stream(dbData.split(DELIMITER)).map(LocalTime::parse).collect(Collectors.toList());
     }
 }
