@@ -1,12 +1,11 @@
 package com.example.devTimesheet.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,10 +20,8 @@ public class Branch {
     int id;
 
     String nameBranch;
-
-    @OneToMany(
-            mappedBy = "branch",
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE
+                    , CascadeType.PERSIST, CascadeType.REFRESH})
     List<User> users = new ArrayList<>();
 }

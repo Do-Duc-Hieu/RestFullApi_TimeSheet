@@ -1,16 +1,14 @@
 package com.example.devTimesheet.dto.request;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +23,6 @@ public class ProjectRequest {
     @NotNull(message = "Date must not be null")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate date;
-
     String note;
 
     @NotBlank(message = "Client name must not be blank")

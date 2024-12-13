@@ -1,5 +1,6 @@
 package com.example.devTimesheet.service;
 
+
 import jakarta.mail.MessagingException;
 
 public interface EmailService {
