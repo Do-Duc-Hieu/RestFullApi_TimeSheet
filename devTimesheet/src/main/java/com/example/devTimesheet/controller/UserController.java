@@ -8,6 +8,7 @@ import java.util.List;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
+import org.hibernate.Hibernate;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,9 +26,7 @@ import com.example.devTimesheet.dto.request.RequestRequest;
 import com.example.devTimesheet.dto.request.TimeSheetRequest;
 import com.example.devTimesheet.dto.request.WorkTimeRequest;
 import com.example.devTimesheet.dto.respon.*;
-import com.example.devTimesheet.entity.Request;
-import com.example.devTimesheet.entity.RequestOff;
-import com.example.devTimesheet.entity.User;
+import com.example.devTimesheet.entity.*;
 import com.example.devTimesheet.service.*;
 
 import lombok.AccessLevel;
@@ -63,8 +62,8 @@ public class UserController {
     public ResponseEntity<Resource> getImageRequest(@PathVariable Integer id) throws IOException {
         Request request = requestService.findById(id);
         Resource resource = null;
-        if (request.getRequestType() instanceof RequestOff) {
-            RequestOff requestOff = (RequestOff) request.getRequestType();
+        RequestType realRequestType = (RequestType) Hibernate.unproxy(request.getRequestType());
+        if (realRequestType instanceof RequestOff requestOff) {
             File file = requestOff.getImage();
             resource = new UrlResource(file.toURI());
         }

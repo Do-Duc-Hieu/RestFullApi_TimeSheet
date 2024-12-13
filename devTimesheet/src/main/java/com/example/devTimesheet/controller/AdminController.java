@@ -554,7 +554,7 @@ public class AdminController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @GetMapping("/getAllLeaveType")
     public ApiRespon<List<LeaveTypeRespon>> findAllLeaveType() {
 
@@ -563,7 +563,7 @@ public class AdminController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @GetMapping("/getLeaveType/{idLeaveType}")
     public ApiRespon<LeaveTypeRespon> getLeaveType(@PathVariable Integer idLeaveType) {
 
