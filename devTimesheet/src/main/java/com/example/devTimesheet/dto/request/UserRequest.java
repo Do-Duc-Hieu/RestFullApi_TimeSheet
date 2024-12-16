@@ -1,11 +1,12 @@
 package com.example.devTimesheet.dto.request;
 
-import com.example.devTimesheet.dto.request.RoleRequest;
-import com.example.devTimesheet.entity.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import com.example.devTimesheet.entity.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -38,6 +39,7 @@ public class UserRequest {
 
     @NotBlank(message = "Address must not be blank")
     String address;
+
     String phone;
     String bank;
     String bankAccount;

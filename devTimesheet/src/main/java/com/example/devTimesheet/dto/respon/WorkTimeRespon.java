@@ -1,10 +1,9 @@
 package com.example.devTimesheet.dto.respon;
 
+import java.time.LocalTime;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor

@@ -1,22 +1,20 @@
 package com.example.devTimesheet.repository;
 
-import com.example.devTimesheet.entity.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+import com.example.devTimesheet.entity.*;
 
 @DataJpaTest
 @SpringJUnitConfig
@@ -32,21 +30,13 @@ public class TimeSheetRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Branch branch = Branch.builder()
-                .nameBranch("hn1")
-                .build();
+        Branch branch = Branch.builder().nameBranch("hn1").build();
 
-        User user = User.builder()
-                .username("testuser")
-                .build();
+        User user = User.builder().username("testuser").build();
 
-        Project project = Project.builder()
-                .nameProject("Test Project")
-                .build();
+        Project project = Project.builder().nameProject("Test Project").build();
 
-        Status status = Status.builder()
-                .nameStatus("In Progress")
-                .build();
+        Status status = Status.builder().nameStatus("In Progress").build();
 
         TimeSheet timeSheet1 = TimeSheet.builder()
                 .date(LocalDate.of(2024, 7, 25))

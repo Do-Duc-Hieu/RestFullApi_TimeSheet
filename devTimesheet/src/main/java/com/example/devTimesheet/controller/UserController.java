@@ -1,5 +1,26 @@
 package com.example.devTimesheet.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
+
+import org.hibernate.Hibernate;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.devTimesheet.dto.request.RequestRequest;
 import com.example.devTimesheet.dto.request.TimeSheetRequest;
@@ -7,33 +28,11 @@ import com.example.devTimesheet.dto.request.WorkTimeRequest;
 import com.example.devTimesheet.dto.respon.*;
 import com.example.devTimesheet.entity.*;
 import com.example.devTimesheet.service.*;
-import jakarta.mail.MessagingException;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -47,7 +46,7 @@ public class UserController {
     EmailService emailService;
     UserService userService;
 
-    //Load image
+    // Load image
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @GetMapping("/avatar/{id}")
     public ResponseEntity<Resource> getAvatar(@PathVariable Integer id) throws IOException {
@@ -55,9 +54,7 @@ public class UserController {
         File file = user.getAvatar();
         Resource resource = new UrlResource(file.toURI());
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_PNG)
-                .body(resource);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(resource);
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -70,9 +67,7 @@ public class UserController {
             File file = requestOff.getImage();
             resource = new UrlResource(file.toURI());
         }
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_PNG)
-                .body(resource);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(resource);
     }
 
     // Service TimeSheet
@@ -82,20 +77,19 @@ public class UserController {
 
         LocalDate localDate = LocalDate.parse(date);
         return ApiRespon.<List<TimeSheetRespon>>builder()
-                .result(timeSheetService.getTimeSheetByUserAndDate(localDate)).build();
+                .result(timeSheetService.getTimeSheetByUserAndDate(localDate))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @GetMapping("/getTimeSheetByUserAndDateRange/{startDate}/{endDate}")
-    public ApiRespon<List<TimeSheetRespon>> findTimeSheetByUserAndDateRange
-            (@PathVariable String startDate,
-             @PathVariable String endDate) {
+    public ApiRespon<List<TimeSheetRespon>> findTimeSheetByUserAndDateRange(
+            @PathVariable String startDate, @PathVariable String endDate) {
 
         LocalDate startLocalDate = LocalDate.parse(startDate);
         LocalDate endLocalDate = LocalDate.parse(endDate);
         return ApiRespon.<List<TimeSheetRespon>>builder()
-                .result(timeSheetService.getTimeSheetByUserAndDateRange(
-                        startLocalDate, endLocalDate))
+                .result(timeSheetService.getTimeSheetByUserAndDateRange(startLocalDate, endLocalDate))
                 .build();
     }
 
@@ -111,9 +105,8 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         return ApiRespon.<List<TimeSheetRespon>>builder()
-                .result(timeSheetService
-                        .searchTimeSheet(projectName, userName,
-                                branchName, statusName, type, startDate, endDate))
+                .result(timeSheetService.searchTimeSheet(
+                        projectName, userName, branchName, statusName, type, startDate, endDate))
                 .build();
     }
 
@@ -122,7 +115,8 @@ public class UserController {
     public ApiRespon<List<TimeSheetRespon>> findAllTimeSheet() {
 
         return ApiRespon.<List<TimeSheetRespon>>builder()
-                .result(timeSheetService.findAllTimeSheet()).build();
+                .result(timeSheetService.findAllTimeSheet())
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -130,7 +124,8 @@ public class UserController {
     public ApiRespon<TimeSheetRespon> getTimeSheet(@PathVariable Integer idTimeSheet) {
 
         return ApiRespon.<TimeSheetRespon>builder()
-                .result(timeSheetService.getTimeSheet(idTimeSheet)).build();
+                .result(timeSheetService.getTimeSheet(idTimeSheet))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -138,33 +133,35 @@ public class UserController {
     public ApiRespon<TimeSheetRespon> addTImeSheet(@RequestBody @Valid TimeSheetRequest request) {
 
         return ApiRespon.<TimeSheetRespon>builder()
-                .result(timeSheetService.createTimeSheet(request)).build();
+                .result(timeSheetService.createTimeSheet(request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PutMapping("/updateTimeSheet/{idTimeSheet}")
-    public ApiRespon<TimeSheetRespon> updateTimeSheet(@PathVariable Integer idTimeSheet,
-                                                      @RequestBody @Valid TimeSheetRequest request){
+    public ApiRespon<TimeSheetRespon> updateTimeSheet(
+            @PathVariable Integer idTimeSheet, @RequestBody @Valid TimeSheetRequest request) {
         return ApiRespon.<TimeSheetRespon>builder()
-                .result(timeSheetService.updateTimeSheet(idTimeSheet, request)).build();
+                .result(timeSheetService.updateTimeSheet(idTimeSheet, request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @DeleteMapping("/deleteTimeSheet/{idTimeSheet}")
-    public ApiRespon<String> deleteTimeSheet(@PathVariable Integer idTimeSheet){
+    public ApiRespon<String> deleteTimeSheet(@PathVariable Integer idTimeSheet) {
 
         timeSheetService.deleteTimeSheet(idTimeSheet);
-        return ApiRespon.<String>builder()
-                .result("TimeSheet has been deleted").build();
+        return ApiRespon.<String>builder().result("TimeSheet has been deleted").build();
     }
 
     @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/browseTimeSheet/{idTimeSheet}")
-    public ApiRespon<TimeSheetRespon> browseTimeSheet(@PathVariable Integer idTimeSheet,
-                                                      @RequestBody @Valid TimeSheetRequest request){
+    public ApiRespon<TimeSheetRespon> browseTimeSheet(
+            @PathVariable Integer idTimeSheet, @RequestBody @Valid TimeSheetRequest request) {
 
         return ApiRespon.<TimeSheetRespon>builder()
-                .result(timeSheetService.browseTimeSheet(idTimeSheet, request)).build();
+                .result(timeSheetService.browseTimeSheet(idTimeSheet, request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin')")
@@ -182,18 +179,17 @@ public class UserController {
         timeSheetService.exportTimeSheetsToExcel(
                 projectName, userName, branchName, statusName, type, startDate, endDate);
 
-        return ApiRespon.<String>builder()
-                .result("TimeSheet has been export").build();
+        return ApiRespon.<String>builder().result("TimeSheet has been export").build();
     }
 
-
-    //Service worktime
+    // Service worktime
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PostMapping("/addWorkTime")
     public ApiRespon<WorkTimeRespon> addWorkTime(@RequestBody @Valid WorkTimeRequest request) {
 
         return ApiRespon.<WorkTimeRespon>builder()
-                .result(workTimeService.createWorkTime(request)).build();
+                .result(workTimeService.createWorkTime(request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -201,7 +197,8 @@ public class UserController {
     public ApiRespon<List<WorkTimeRespon>> findAllWorkTime() {
 
         return ApiRespon.<List<WorkTimeRespon>>builder()
-                .result(workTimeService.findAllWorkTime()).build();
+                .result(workTimeService.findAllWorkTime())
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -209,36 +206,39 @@ public class UserController {
     public ApiRespon<WorkTimeRespon> getWorkTime(@PathVariable Integer idWorkTime) {
 
         return ApiRespon.<WorkTimeRespon>builder()
-                .result(workTimeService.getWorkTime(idWorkTime)).build();
+                .result(workTimeService.getWorkTime(idWorkTime))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PutMapping("/updateWorkTime/{idWorkTime}")
-    public ApiRespon<WorkTimeRespon> updateWorkTime(@PathVariable Integer idWorkTime,
-                                                    @RequestBody @Valid WorkTimeRequest request){
+    public ApiRespon<WorkTimeRespon> updateWorkTime(
+            @PathVariable Integer idWorkTime, @RequestBody @Valid WorkTimeRequest request) {
 
         return ApiRespon.<WorkTimeRespon>builder()
-                .result(workTimeService.updateWorkTime(idWorkTime, request)).build();
+                .result(workTimeService.updateWorkTime(idWorkTime, request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @DeleteMapping("/deleteWorkTime/{idWorkTime}")
-    public ApiRespon<String> deleteWorkTime(@PathVariable Integer idWorkTime){
+    public ApiRespon<String> deleteWorkTime(@PathVariable Integer idWorkTime) {
 
         workTimeService.deleteWorkTime(idWorkTime);
-        return ApiRespon.<String>builder()
-                .result("WorkTime has been deleted").build();
+        return ApiRespon.<String>builder().result("WorkTime has been deleted").build();
     }
 
-
-    //Service request
+    // Service request
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PostMapping("/addRequest")
-    public ApiRespon<RequestRespon> addRequest(@RequestPart("request") @Valid RequestRequest request,
-                                               @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+    public ApiRespon<RequestRespon> addRequest(
+            @RequestPart("request") @Valid RequestRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image)
+            throws IOException {
 
         return ApiRespon.<RequestRespon>builder()
-                .result(requestService.createRequest(request, image)).build();
+                .result(requestService.createRequest(request, image))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin')")
@@ -246,7 +246,8 @@ public class UserController {
     public ApiRespon<List<RequestRespon>> findAllRequest() {
 
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService.findAllRequest()).build();
+                .result(requestService.findAllRequest())
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -254,45 +255,40 @@ public class UserController {
     public ApiRespon<RequestRespon> getRequest(@PathVariable Integer idRequest) {
 
         return ApiRespon.<RequestRespon>builder()
-                .result(requestService.getRequest(idRequest)).build();
+                .result(requestService.getRequest(idRequest))
+                .build();
     }
 
     @GetMapping("/getRequestByUserAndDateRangeExcludingWorkTime/{startDate}/{endDate}")
-    public ApiRespon<List<RequestRespon>> findRequestByUserAndDateRangeLeave
-            (@PathVariable String startDate,
-             @PathVariable String endDate) {
+    public ApiRespon<List<RequestRespon>> findRequestByUserAndDateRangeLeave(
+            @PathVariable String startDate, @PathVariable String endDate) {
 
         LocalDate startLocalDate = LocalDate.parse(startDate);
         LocalDate endLocalDate = LocalDate.parse(endDate);
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService.getRequestByUserAndDateRangeExcludingWorkTime
-                        (startLocalDate, endLocalDate))
+                .result(requestService.getRequestByUserAndDateRangeExcludingWorkTime(startLocalDate, endLocalDate))
                 .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @GetMapping("/getWorkTimeRequestsByUserAndDateRange/{startDate}/{endDate}")
-    public ApiRespon<List<RequestRespon>> findWorkTimeRequestsByUserAndDateRange
-            (@PathVariable String startDate,
-             @PathVariable String endDate) {
+    public ApiRespon<List<RequestRespon>> findWorkTimeRequestsByUserAndDateRange(
+            @PathVariable String startDate, @PathVariable String endDate) {
 
         LocalDate startLocalDate = LocalDate.parse(startDate);
         LocalDate endLocalDate = LocalDate.parse(endDate);
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService
-                        .getWorkTimeRequestsByUserAndDateRange(startLocalDate, endLocalDate))
+                .result(requestService.getWorkTimeRequestsByUserAndDateRange(startLocalDate, endLocalDate))
                 .build();
     }
 
     @PreAuthorize("hasAuthority('Admin')")
     @GetMapping("/getWorkTimeRequestsByUserAndPending/{nameStatus}")
-    public ApiRespon<List<RequestRespon>> findAllWorkTimeRequestsByUserAndPending
-            (@PathVariable String nameStatus,
-             @RequestParam List<String> nameProjects) {
+    public ApiRespon<List<RequestRespon>> findAllWorkTimeRequestsByUserAndPending(
+            @PathVariable String nameStatus, @RequestParam List<String> nameProjects) {
 
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService
-                        .findAllWorkTimeRequestsByUserAndPending(nameStatus, nameProjects))
+                .result(requestService.findAllWorkTimeRequestsByUserAndPending(nameStatus, nameProjects))
                 .build();
     }
 
@@ -307,8 +303,8 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService
-                        .searchRequestByProject(projectName, email, statusName, nameRequestType, startDate, endDate))
+                .result(requestService.searchRequestByProject(
+                        projectName, email, statusName, nameRequestType, startDate, endDate))
                 .build();
     }
 
@@ -323,38 +319,37 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         return ApiRespon.<List<RequestRespon>>builder()
-                .result(requestService
-                        .searchRequestByBranch(branchName, email, statusName, nameRequestType, startDate, endDate))
+                .result(requestService.searchRequestByBranch(
+                        branchName, email, statusName, nameRequestType, startDate, endDate))
                 .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PutMapping("/updateRequest/{idRequest}")
     public ApiRespon<RequestRespon> updateRequest(
-            @PathVariable Integer idRequest ,
-            @RequestBody @Valid RequestRequest request){
+            @PathVariable Integer idRequest, @RequestBody @Valid RequestRequest request) {
 
         return ApiRespon.<RequestRespon>builder()
-                .result(requestService.updateRequest(idRequest, request)).build();
+                .result(requestService.updateRequest(idRequest, request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @PutMapping("/browseRequest/{idRequest}")
     public ApiRespon<RequestRespon> browseRequest(
-            @PathVariable Integer idRequest ,
-            @RequestBody @Valid RequestRequest request){
+            @PathVariable Integer idRequest, @RequestBody @Valid RequestRequest request) {
 
         return ApiRespon.<RequestRespon>builder()
-                .result(requestService.browseRequest(idRequest, request)).build();
+                .result(requestService.browseRequest(idRequest, request))
+                .build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
     @DeleteMapping("/deleteRequest/{idRequest}")
-    public ApiRespon<String> deleteRequest(@PathVariable Integer idRequest){
+    public ApiRespon<String> deleteRequest(@PathVariable Integer idRequest) {
 
         requestService.deleteRequest(idRequest);
-        return ApiRespon.<String>builder()
-                .result("Request has been deleted").build();
+        return ApiRespon.<String>builder().result("Request has been deleted").build();
     }
 
     @PreAuthorize("hasAuthority('Admin') or hasAuthority('User')")
@@ -368,23 +363,19 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate)
             throws IOException {
 
-        requestService.exportRequestToExcel(
-                projectName, email, statusName, nameRequestType, startDate, endDate);
+        requestService.exportRequestToExcel(projectName, email, statusName, nameRequestType, startDate, endDate);
 
-        return ApiRespon.<String>builder()
-                .result("Request has been export").build();
+        return ApiRespon.<String>builder().result("Request has been export").build();
     }
 
-    //Service email
+    // Service email
     @PreAuthorize("hasAuthority('User')")
     @GetMapping("/sendEmail")
-    public ApiRespon<String> exportRequestToExcel(@RequestParam String userName,
-                                                @RequestParam String newPassword)
+    public ApiRespon<String> exportRequestToExcel(@RequestParam String userName, @RequestParam String newPassword)
             throws IOException, MessagingException {
 
         emailService.sendEmail(userName, newPassword);
 
-        return ApiRespon.<String>builder()
-                .result("Email has been send").build();
+        return ApiRespon.<String>builder().result("Email has been send").build();
     }
 }

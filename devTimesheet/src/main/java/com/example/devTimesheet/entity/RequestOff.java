@@ -1,11 +1,13 @@
 package com.example.devTimesheet.entity;
 
-import com.example.devTimesheet.mapper.FileImageAttributeConverter;
+import java.io.File;
+
 import jakarta.persistence.*;
+
+import com.example.devTimesheet.mapper.FileImageAttributeConverter;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.io.File;
 
 @Entity
 @Data
@@ -16,6 +18,7 @@ import java.io.File;
 @DiscriminatorValue("OFF")
 public class RequestOff extends RequestType {
     String note;
+
     @Convert(converter = FileImageAttributeConverter.class)
     File Image;
 
